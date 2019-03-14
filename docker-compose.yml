@@ -1,7 +1,10 @@
 version: "2.2"
 services:
   master:
-    image: gettyimages/spark
+    image: cbspark
+    build:
+      context: .
+      dockerfile: Dockerfile
     command: bin/spark-class org.apache.spark.deploy.master.Master -h master
     hostname: master
     environment:
@@ -23,10 +26,11 @@ services:
       - 8080:8080
     volumes:
       - ./conf/master:/conf
-      - ./data:/tmp/data
+      - ./data/data:/data
+      - ./data/code:/code
 
   worker:
-    image: gettyimages/spark
+    image: cbspark
     command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://master:7077
     hostname: worker
     environment:
@@ -48,4 +52,6 @@ services:
       - 8081:8081
     volumes:
       - ./conf/worker:/conf
-      - ./data:/tmp/data
+      - ./data/data:/data
+      - ./data/code:/code
+

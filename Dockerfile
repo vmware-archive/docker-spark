@@ -1,8 +1,8 @@
 FROM debian:stretch
-MAINTAINER Getty Images "https://github.com/gettyimages"
+MAINTAINER Carbon Black "https://github.com/carbonblack/"
 
 RUN apt-get update \
- && apt-get install -y locales \
+ && apt-get install -y locales fish man-db nano \
  && dpkg-reconfigure -f noninteractive locales \
  && locale-gen C.UTF-8 \
  && /usr/sbin/update-locale LANG=C.UTF-8 \
@@ -10,6 +10,10 @@ RUN apt-get update \
  && locale-gen \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
+
+ ## install ripgrep
+ RUN curl -s --retry 3 -LO https://github.com/BurntSushi/ripgrep/releases/download/0.10.0/ripgrep_0.10.0_amd64.deb \
+ && dpkg -i ripgrep_0.10.0_amd64.deb
 
 # Users with other locales should set this in their derivative image
 ENV LANG en_US.UTF-8
@@ -19,15 +23,19 @@ ENV LC_ALL en_US.UTF-8
 RUN apt-get update \
  && apt-get install -y curl unzip \
     python3 python3-setuptools \
- && ln -s /usr/bin/python3 /usr/bin/python \
  && easy_install3 pip py4j \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
+
+# PYTHON 
+RUN pip3 install pyspark
 
 # http://blog.stuart.axelbrooke.com/python-3-on-spark-return-of-the-pythonhashseed
 ENV PYTHONHASHSEED 0
 ENV PYTHONIOENCODING UTF-8
 ENV PIP_DISABLE_PIP_VERSION_CHECK 1
+ENV PYSPARK_PYTHON python2.7
+ENV PYSPARK3_PYTHON python3
 
 # JAVA
 ARG JAVA_MAJOR_VERSION=8
@@ -68,6 +76,7 @@ RUN curl -sL --retry 3 \
   | tar x -C /usr/ \
  && mv /usr/$SPARK_PACKAGE $SPARK_HOME \
  && chown -R root:root $SPARK_HOME
+RUN chsh -s /usr/bin/fish
 
 WORKDIR $SPARK_HOME
 CMD ["bin/spark-class", "org.apache.spark.deploy.master.Master"]

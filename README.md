@@ -7,7 +7,7 @@ A `debian:stretch` based [Spark](http://spark.apache.org) container. Use it in a
 
 To run `SparkPi`, run the image with Docker:
 
-    docker run --rm -it -p 4040:4040 gettyimages/spark bin/run-example SparkPi 10
+    docker run --rm -it -p 4040:4040 cbspark bin/run-example SparkPi 10
 
 To start `spark-shell` with your AWS credentials:
 
@@ -26,12 +26,13 @@ To create a simplistic standalone cluster with [docker-compose](http://docs.dock
 
 The SparkUI will be running at `http://${YOUR_DOCKER_HOST}:8080` with one worker listed. To run `pyspark`, exec into a container:
 
-    docker exec -it dockerspark_master_1 /bin/bash
+    docker exec -it docker-spark_master_1 /bin/bash
+    docker exec -it docker-spark_master_1 /usr/bin/fish
     bin/pyspark
 
 To run `SparkPi`, exec into a container:
 
-    docker exec -it dockerspark_master_1 /bin/bash
+    docker exec -it docker-spark_master_1 /bin/bash
     bin/run-example SparkPi 10
 
 ## license
