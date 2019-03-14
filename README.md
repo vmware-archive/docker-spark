@@ -11,12 +11,12 @@ To run `SparkPi`, run the image with Docker:
 
 To start `spark-shell` with your AWS credentials:
 
-    docker run --rm -it -e "AWS_ACCESS_KEY_ID=YOURKEY" -e "AWS_SECRET_ACCESS_KEY=YOURSECRET" -p 4040:4040 gettyimages/spark bin/spark-shell
+    docker run --rm -it -e "AWS_ACCESS_KEY_ID=YOURKEY" -e "AWS_SECRET_ACCESS_KEY=YOURSECRET" -p 4040:4040 cbspark bin/spark-shell
 
 To do a thing with Pyspark
 
     echo -e "import pyspark\n\nprint(pyspark.SparkContext().parallelize(range(0, 10)).count())" > count.py
-    docker run --rm -it -p 4040:4040 -v $(pwd)/count.py:/count.py gettyimages/spark bin/spark-submit /count.py
+    docker run --rm -it -p 4040:4040 -v $(pwd)/count.py:/count.py cbspark bin/spark-submit /count.py
 
 ## docker-compose example
 
