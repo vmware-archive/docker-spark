@@ -11,9 +11,6 @@ RUN apt-get update \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
- ## install ripgrep
- RUN curl -s --retry 3 -LO https://github.com/BurntSushi/ripgrep/releases/download/0.10.0/ripgrep_0.10.0_amd64.deb \
- && dpkg -i ripgrep_0.10.0_amd64.deb
 
 # Users with other locales should set this in their derivative image
 ENV LANG en_US.UTF-8
@@ -21,14 +18,14 @@ ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
 RUN apt-get update \
- && apt-get install -y curl unzip \
+ && apt-get install -y curl unzip git \
     python3 python3-setuptools \
  && easy_install3 pip py4j \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
 # PYTHON 
-RUN pip3 install pyspark
+RUN pip3 install pyspark jupyter
 
 # http://blog.stuart.axelbrooke.com/python-3-on-spark-return-of-the-pythonhashseed
 ENV PYTHONHASHSEED 0
@@ -77,6 +74,12 @@ RUN curl -sL --retry 3 \
  && mv /usr/$SPARK_PACKAGE $SPARK_HOME \
  && chown -R root:root $SPARK_HOME
 RUN chsh -s /usr/bin/fish
+
+
+
+ ## install ripgrep
+ RUN curl -s --retry 3 -LO https://github.com/BurntSushi/ripgrep/releases/download/0.10.0/ripgrep_0.10.0_amd64.deb \
+ && dpkg -i ripgrep_0.10.0_amd64.deb
 
 WORKDIR $SPARK_HOME
 CMD ["bin/spark-class", "org.apache.spark.deploy.master.Master"]

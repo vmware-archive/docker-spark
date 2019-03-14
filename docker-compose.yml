@@ -11,6 +11,7 @@ services:
       MASTER: spark://master:7077
       SPARK_CONF_DIR: /conf
       SPARK_PUBLIC_DNS: localhost
+      PYSPARK_PYTHON: python3
     expose:
       - 7001
       - 7002
@@ -40,6 +41,7 @@ services:
       SPARK_WORKER_PORT: 8881
       SPARK_WORKER_WEBUI_PORT: 8081
       SPARK_PUBLIC_DNS: localhost
+      PYSPARK_PYTHON: python3
     links:
       - master
     expose:
@@ -54,4 +56,3 @@ services:
       - ./conf/worker:/conf
       - ./data/data:/data
       - ./data/code:/code
-
